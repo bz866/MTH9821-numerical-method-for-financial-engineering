@@ -6,14 +6,14 @@
 class EuropeanOption {
 private:
     // t, S, K, T, sigma, r, q
-    double t_;      // Current time
-    double S_;      // Spot price
-    double K_;      // Strike price
-    double T_;      // Maturity
-    double sigma_;  // Volatility
-    double r_;      // Const interest rate
-    double q_;      // Dividend rate
-    
+    double t_; // Current time
+    double S_; // Spot price
+    double K_; // Strike price
+    double T_; // Maturity
+    double sigma_; // Volatility
+    double r_; // Const interest rate
+    double q_; // Dividend rate
+
     // Intermediate values for Black-Scholes pricing
     double d1_;
     double d2_;
@@ -23,87 +23,103 @@ private:
     double Nd2_;
     double q_disc_; // Discount by dividend rate: exp(-q(T-t))
     double r_disc_; // Discount by interest rate: exp(-r(T-t))
-    
-    double Phi(double t) const {
+
+    double Phi(double t) const
+    {
         return std::erfc(-t / std::sqrt(2.)) / 2.;
     }
 
-    double Z(double t) const {
+    double Z(double t) const
+    {
         return std::exp(-t * t / 2.) / std::sqrt(2. * M_PI);
     }
-    
+
 public:
     EuropeanOption(double t, double S, double K, double T, double sigma, double r, double q);
     ~EuropeanOption() = default;
-    
-    double Call() const {
+
+    double Call() const
+    {
         return S_ * q_disc_ * Nd1_ - K_ * r_disc_ * Nd2_;
     }
 
-    double Put() const {
+    double Put() const
+    {
         return -S_ * q_disc_ * (1. - Nd1_) + K_ * r_disc_ * (1. - Nd2_);
     }
 
-    std::function<double(double, double)> CallPayoff() const {
-        return [&](double S, double t)->double {
+    std::function<double(double, double)> CallPayoff() const
+    {
+        return [&](double S, double t) -> double {
             return std::max(S - K_, 0.);
         };
     }
 
-    std::function<double(double, double)> PutPayoff() const {
-        return [&](double S, double t)->double {
+    std::function<double(double, double)> PutPayoff() const
+    {
+        return [&](double S, double t) -> double {
             return std::max(K_ - S, 0.);
         };
     }
 
     // Greeks
-    double DeltaCall() const {
+    double DeltaCall() const
+    {
         return q_disc_ * Nd1_;
     }
-    double DeltaPut() const {
+    double DeltaPut() const
+    {
         return -q_disc_ * (1. - Nd1_);
     }
 
-    double GammaCall() const {
+    double GammaCall() const
+    {
         return q_disc_ / (S_ * sigma_ * std::sqrt(T_ - t_)) * Zd1_;
     }
-    double GammaPut() const {
+    double GammaPut() const
+    {
         return this->GammaCall();
     }
 
-    double ThetaCall() const {
+    double ThetaCall() const
+    {
         double res = -(S_ * sigma_ * q_disc_) / (2. * std::sqrt(T_ - t_)) * Zd1_;
-        
+
         res += q_ * S_ * q_disc_ * Nd1_;
-        
+
         res += -r_ * K_ * r_disc_ * Nd2_;
-        
+
         return res;
     }
 
-    double ThetaPut() const {
+    double ThetaPut() const
+    {
         double res = -(S_ * sigma_ * q_disc_) / (2. * std::sqrt(T_ - t_)) * Zd1_;
-        
+
         res += -q_ * S_ * q_disc_ * (1 - Nd1_);
-        
+
         res += r_ * K_ * r_disc_ * (1 - Nd2_);
-        
+
         return res;
     }
 
-    double VegaCall() const {
+    double VegaCall() const
+    {
         return S_ * q_disc_ * std::sqrt(T_ - t_) * Zd1_;
     }
 
-    double VegaPut() const {
+    double VegaPut() const
+    {
         return this->VegaCall();
     }
 
-    double RhoCall() const {
+    double RhoCall() const
+    {
         return K_ * (T_ - t_) * r_disc_ * Nd2_;
     }
 
-    double RhoPut() const {
+    double RhoPut() const
+    {
         return -K_ * (T_ - t_) * r_disc_ * (1. - Nd2_);
     }
 };
