@@ -1,20 +1,18 @@
 #ifndef Calculator_hpp
 #define Calculator_hpp
 
-#include <iostream>
-#include <iomanip>
-#include "TrinomialTree.hpp"
-#include "BinomialTreeVolatilityUnknown.hpp"
 #include "BinomialTree.hpp"
+#include "BinomialTreeVolatilityUnknown.hpp"
 #include "EuropeanOption.hpp"
+#include "TrinomialTree.hpp"
+#include <iomanip>
+#include <iostream>
 
-
-class Calculator
-{
+class Calculator {
 public:
-    Calculator(){};
-    ~Calculator(){};
-    
+    Calculator() {};
+    ~Calculator() {};
+
     void PriceAndGreeks(const EuropeanOption& option, bool american);
     void PriceAndGreeks_compensated(const EuropeanOption& option);
 };
