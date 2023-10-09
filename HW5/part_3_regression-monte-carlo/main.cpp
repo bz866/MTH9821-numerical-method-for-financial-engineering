@@ -1,4 +1,5 @@
 #include "regression.h"
+#include "mc_regression.h"
 #include <iostream>
 #include <cassert> // For simple unit tests.
 

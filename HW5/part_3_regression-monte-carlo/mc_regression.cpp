@@ -46,10 +46,18 @@ namespace montecarlo {
             return evaluate_polynomial(_coeffs.at(time), x);
         }
 
+        // Part 3.1
+        /* Implement a constructor similar to that of PolynomialMCRegression */
         HermiteMCRegression::HermiteMCRegression(const uint times, const uint degree, const bool precondition,
-                                                       const bool standardize)
-            /* Implement a constructor similar to that of PolynomialMCRegression */
-            
+                                                       const bool standardize):
+            MCRegression(times),
+            degree(degree),
+            precondition(precondition),
+            standardize(standardize) {
+            _coeffs.resize(times);
+            _means.resize(times);
+            _stds.resize(times);
+        }
 
         arr HermiteMCRegression::fit_predict(const uint time, const arr &x, const arr &y) {
 			/* Implement a Hermite version of PolynomialMCRegression::fit_predict */

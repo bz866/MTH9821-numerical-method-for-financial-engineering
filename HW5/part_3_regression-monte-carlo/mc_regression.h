@@ -2,7 +2,7 @@
 #define MC_REGRESSION_H
 
 #include <vector>
-#include <Eigen/Dense>
+#include <Dense>
 
 namespace montecarlo {
     namespace regression {
