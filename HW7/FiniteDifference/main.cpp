@@ -22,10 +22,10 @@ int main()
     double alpha = 0.45;
     int M = 4;
 
-    // EuropeanOption europeanOption(0, S0, K, T, sigma, r, q);
-    // FiniteDifferencePricer pricer(S0, K, T, sigma, r, q);
-    EuropeanOption europeanOption(0., 37., 40, .75, .28, .03, .015);
-    FiniteDifferencePricer pricerEuroPut(37., 40, .75, .28, .03, .015);
+    EuropeanOption europeanOption(0, S0, K, T, sigma, r, q);
+    FiniteDifferencePricer pricerEuroPut(S0, K, T, sigma, r, q);
+    // EuropeanOption europeanOption(0., 37., 40, .75, .28, .03, .015);
+    // FiniteDifferencePricer pricerEuroPut(37., 40, .75, .28, .03, .015);
     pricerEuroPut.setHyperparameters(alpha, M);
     
     std::cout << "European Put" << std::endl;

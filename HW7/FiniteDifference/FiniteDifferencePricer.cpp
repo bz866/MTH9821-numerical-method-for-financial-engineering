@@ -67,7 +67,7 @@ std::pair<std::vector<double>, std::vector<double>> FiniteDifferencePricer::buil
     std::vector<double> u_mesh(x_mesh.size()+1);
     std::transform(x_mesh.cbegin(), x_mesh.cend(), u_mesh.begin(), boundary_tau_0_);
     std::vector<double> u_mesh_tau_plus_1(x_mesh.size()+1);
-    // printVector(u_mesh);
+    printVector(u_mesh);
     
     // moving forward from t_1 to t_{M-1}
     for (std::size_t i = 1; i < M; ++i)
@@ -80,7 +80,7 @@ std::pair<std::vector<double>, std::vector<double>> FiniteDifferencePricer::buil
 
     // moving forward to t_M
     u_mesh_tau_plus_1 = computeNextUMesh(tau_final_, alpha, x_mesh, u_mesh);
-    // printVector(u_mesh_tau_plus_1);
+    printVector(u_mesh_tau_plus_1);
 
     return std::make_pair(u_mesh, u_mesh_tau_plus_1);
 }
