@@ -1,5 +1,5 @@
-#ifndef GAUSS_SIEDEL_HPP
-#define GAUSS_SIEDEL_HPP
+#ifndef GAUSS_SIEDEL_SOLVER_HPP
+#define GAUSS_SIEDEL_SOLVER_HPP
 
 #include "stopping_criteria.hpp"
 #include <Dense>
