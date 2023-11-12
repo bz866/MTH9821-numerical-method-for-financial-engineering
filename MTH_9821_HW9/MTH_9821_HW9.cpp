@@ -11,6 +11,9 @@
 
 
 #include "Decomposition.hpp"
+#include "jacobi_solver.hpp"
+#include "gauss_siedel_solver.hpp"
+#include "sor_solver.hpp"
 #include <iostream>
 #include <Dense>
 
@@ -97,8 +100,121 @@ void test_decomposition()
     std::cout << "x (solution of Ux = b):" << std::endl << x << std::endl;
 }
 
+
+void test_jacobi()
+{
+    // Define a matrix A and vector b representing the linear system Ax = b
+    mat A(3, 3);
+    A << 4, 1, 1,
+         1, 3, -1,
+         1, -1, 3;
+    vec b(3);
+    b << 6, 8, 7;
+
+    // Initial guess x_0 (can be zeros or any other guess)
+    vec x_0 = vec::Zero(3);
+
+    // Tolerance for stopping criterion
+    double tolerance = 0.001;
+
+    // Solve the system using the Jacobi method
+    vec x;
+    unsigned int iterations;
+    std::tie(x, iterations) = jacobi(A, b, x_0, tolerance, consecutive);
+
+    // Output the solution
+    std::cout << "Jacobi with Consecutive Stopping Criteria" << std::endl;
+    std::cout << "Solution vector x:\n" << x << std::endl;
+    std::cout << "Iterations: " << iterations << std::endl;
+    std::cout << "\n\n" << std::endl;
+
+    std::tie(x, iterations) = jacobi(A, b, x_0, tolerance, residual);
+    std::cout << "Jacobi with Residual Stopping Criteria" << std::endl;
+    std::cout << "Solution vector x:\n" << x << std::endl;
+    std::cout << "Iterations: " << iterations << std::endl;
+    std::cout << "\n\n" << std::endl;
+
+}
+
+void test_gauss_siedel()
+{
+        // Define a matrix A and vector b representing the linear system Ax = b
+    mat A(3, 3);
+    A << 4, 1, 1,
+         1, 3, -1,
+         1, -1, 3;
+    vec b(3);
+    b << 6, 8, 7;
+
+    // Initial guess x_0 (can be zeros or any other guess)
+    vec x_0 = vec::Zero(3);
+
+    // Tolerance for stopping criterion
+    double tolerance = 0.001;
+
+    // Solve the system using the Jacobi method
+    vec x;
+    unsigned int iterations;
+    std::tie(x, iterations) = gauss_seidel(A, b, x_0, tolerance, consecutive);
+
+    // Output the solution
+    std::cout << "Gauss-Seidel with Consecutive Stopping Criteria" << std::endl;
+    std::cout << "Solution vector x:\n" << x << std::endl;
+    std::cout << "Iterations: " << iterations << std::endl;
+    std::cout << "\n\n" << std::endl;
+
+    std::tie(x, iterations) = gauss_seidel(A, b, x_0, tolerance, residual);
+    std::cout << "Gauss-Seidel with Residual Stopping Criteria" << std::endl;
+    std::cout << "Solution vector x:\n" << x << std::endl;
+    std::cout << "Iterations: " << iterations << std::endl;
+    std::cout << "\n\n" << std::endl;
+}
+
+void test_sor()
+{
+        // Define a matrix A and vector b representing the linear system Ax = b
+    mat A(3, 3);
+    A << 4, 1, 1,
+         1, 3, -1,
+         1, -1, 3;
+    vec b(3);
+    b << 6, 8, 7;
+
+    // Initial guess x_0 (can be zeros or any other guess)
+    vec x_0 = vec::Zero(3);
+
+    // Tolerance for stopping criterion
+    double tolerance = 0.001;
+
+    // Relaxation factor (omega), often set between 1 and 2
+    double omega = 1.5;
+
+    vec x;
+    unsigned int iterations;
+    std::tie(x, iterations) = sor(A, b, omega, tolerance, consecutive);
+
+    // Output the solution
+    std::cout << "SOR with Consecutive Stopping Criteria" << std::endl;
+    std::cout << "Solution vector x:\n" << x << std::endl;
+    std::cout << "Iterations: " << iterations << std::endl;
+    std::cout << "\n\n" << std::endl;
+
+    std::tie(x, iterations) = sor(A, b, omega, tolerance, residual);
+    std::cout << "SOR with Residual Stopping Criteria" << std::endl;
+    std::cout << "Solution vector x:\n" << x << std::endl;
+    std::cout << "Iterations: " << iterations << std::endl;
+    std::cout << "\n\n" << std::endl;
+}
+
+
+
 int main()
 {
+    // Q1 Q2 Q3
     test_decomposition();
+    // Q4
+    test_jacobi();
+    test_gauss_siedel();
+    test_sor();
     return 0;
 }
