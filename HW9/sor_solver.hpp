@@ -41,4 +41,40 @@ std::tuple<vec, unsigned int> sor(const mat& A, const vec& b, double omega, doub
     return std::make_tuple(x, iterations);
 }
 
+std::tuple<vec, unsigned int> sor_banded(const mat& A, const vec& b, int bandwidth, double omega, double tolerance, StoppingCriterion criterion) {
+    int n = A.rows();
+    vec x = vec::Zero(n);  // Initial guess x_0 as zero vector
+    vec x_prev = x;
+    unsigned int iterations = 0;
+
+    do {
+        x_prev = x;
+        for (int i = 0; i < n; ++i) {
+            double sigma1 = 0.0;
+            for (int j = std::max(0, i - bandwidth); j < i; ++j) {
+                sigma1 += A(i, j) * x[j];
+            }
+
+            double sigma2 = 0.0;
+            for (int j = i + 1; j <= std::min(n - 1, i + bandwidth); ++j) {
+                sigma2 += A(i, j) * x_prev[j];
+            }
+
+            x[i] = (1 - omega) * x_prev[i] + (omega / A(i, i)) * (b[i] - sigma1 - sigma2);
+        }
+
+        if (criterion == consecutive && isConsecutiveClose(x, x_prev, tolerance)) {
+            break;
+        }
+        else if (criterion == residual && isResidualSmall(A, b, x, tolerance)) {
+            break;
+        }
+
+        iterations++;
+    } while (true);
+
+    return std::make_tuple(x, iterations);
+}
+
+
 #endif
