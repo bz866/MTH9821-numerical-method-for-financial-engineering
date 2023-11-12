@@ -136,6 +136,40 @@ void test_jacobi()
 
 }
 
+void test_jacobi_banded()
+{
+    // Define a tridiagonal matrix A (bandwidth = 1)
+    int n = 5; // Size of the matrix
+    mat A = mat::Zero(n, n);
+    A.diagonal() << 4, 3, 5, 3, 4; // Main diagonal
+    A.diagonal(-1) << -1, -1, -1, -1; // Sub-diagonal
+    A.diagonal(1) << -1, -1, -1, -1; // Super-diagonal
+
+    // Define vector b
+    vec b(n);
+    b << 3, 3, 4, 3, 3;
+
+    // Tolerance for convergence
+    double tolerance = 0.001;
+    int bandwidth = 1; // Tridiagonal matrix has bandwidth of 1
+
+    vec x;
+    unsigned int iterations;
+    std::tie(x, iterations) = jacobiBanded(A, b, bandwidth, tolerance, consecutive);
+
+    // Output the solution
+    std::cout << "Jacobi Banded with Consecutive Stopping Criteria" << std::endl;
+    std::cout << "Solution vector x:\n" << x << std::endl;
+    std::cout << "Iterations: " << iterations << std::endl;
+    std::cout << "\n\n" << std::endl;
+
+    std::tie(x, iterations) = jacobiBanded(A, b, bandwidth, tolerance, residual);
+    std::cout << "Jacobi Banded with Residual Stopping Criteria" << std::endl;
+    std::cout << "Solution vector x:\n" << x << std::endl;
+    std::cout << "Iterations: " << iterations << std::endl;
+    std::cout << "\n\n" << std::endl;
+}
+
 void test_gauss_siedel()
 {
         // Define a matrix A and vector b representing the linear system Ax = b
@@ -216,5 +250,8 @@ int main()
     test_jacobi();
     test_gauss_siedel();
     test_sor();
+    // Q4 banded matrices
+    test_jacobi_banded();
+    
     return 0;
 }
