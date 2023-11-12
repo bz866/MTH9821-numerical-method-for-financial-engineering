@@ -136,9 +136,43 @@ void test_jacobi()
 
 }
 
+void test_jacobi_banded()
+{
+    // Define a tridiagonal matrix A (bandwidth = 1)
+    int n = 5; // Size of the matrix
+    mat A = mat::Zero(n, n);
+    A.diagonal() << 4, 3, 5, 3, 4; // Main diagonal
+    A.diagonal(-1) << -1, -1, -1, -1; // Sub-diagonal
+    A.diagonal(1) << -1, -1, -1, -1; // Super-diagonal
+
+    // Define vector b
+    vec b(n);
+    b << 3, 3, 4, 3, 3;
+
+    // Tolerance for convergence
+    double tolerance = 0.001;
+    int bandwidth = 1; // Tridiagonal matrix has bandwidth of 1
+
+    vec x;
+    unsigned int iterations;
+    std::tie(x, iterations) = jacobiBanded(A, b, bandwidth, tolerance, consecutive);
+
+    // Output the solution
+    std::cout << "Jacobi Banded with Consecutive Stopping Criteria" << std::endl;
+    std::cout << "Solution vector x:\n" << x << std::endl;
+    std::cout << "Iterations: " << iterations << std::endl;
+    std::cout << "\n\n" << std::endl;
+
+    std::tie(x, iterations) = jacobiBanded(A, b, bandwidth, tolerance, residual);
+    std::cout << "Jacobi Banded with Residual Stopping Criteria" << std::endl;
+    std::cout << "Solution vector x:\n" << x << std::endl;
+    std::cout << "Iterations: " << iterations << std::endl;
+    std::cout << "\n\n" << std::endl;
+}
+
 void test_gauss_siedel()
 {
-        // Define a matrix A and vector b representing the linear system Ax = b
+    // Define a matrix A and vector b representing the linear system Ax = b
     mat A(3, 3);
     A << 4, 1, 1,
          1, 3, -1,
@@ -170,9 +204,43 @@ void test_gauss_siedel()
     std::cout << "\n\n" << std::endl;
 }
 
+void test_gauss_siedel_banded()
+{
+    // Define a tridiagonal matrix A (bandwidth = 1)
+    int n = 5; // Size of the matrix
+    mat A = mat::Zero(n, n);
+    A.diagonal() << 4, 3, 5, 3, 4; // Main diagonal
+    A.diagonal(-1) << -1, -1, -1, -1; // Sub-diagonal
+    A.diagonal(1) << -1, -1, -1, -1; // Super-diagonal
+
+    // Define vector b
+    vec b(n);
+    b << 3, 3, 4, 3, 3;
+
+    // Tolerance for convergence
+    double tolerance = 0.001;
+    int bandwidth = 1; // Tridiagonal matrix has bandwidth of 1
+
+    vec x;
+    unsigned int iterations;
+    std::tie(x, iterations) = gauss_seidel_banded(A, b, bandwidth, tolerance, consecutive);
+
+    // Output the solution
+    std::cout << "Gauss-Seidel Banded with Consecutive Stopping Criteria" << std::endl;
+    std::cout << "Solution vector x:\n" << x << std::endl;
+    std::cout << "Iterations: " << iterations << std::endl;
+    std::cout << "\n\n" << std::endl;
+
+    std::tie(x, iterations) = gauss_seidel_banded(A, b, bandwidth, tolerance, residual);
+    std::cout << "Gauss-Seidel Banded with Residual Stopping Criteria" << std::endl;
+    std::cout << "Solution vector x:\n" << x << std::endl;
+    std::cout << "Iterations: " << iterations << std::endl;
+    std::cout << "\n\n" << std::endl;
+}
+
 void test_sor()
 {
-        // Define a matrix A and vector b representing the linear system Ax = b
+    // Define a matrix A and vector b representing the linear system Ax = b
     mat A(3, 3);
     A << 4, 1, 1,
          1, 3, -1,
@@ -206,6 +274,43 @@ void test_sor()
     std::cout << "\n\n" << std::endl;
 }
 
+void test_sor_banded()
+{
+    // Define a tridiagonal matrix A (bandwidth = 1)
+    int n = 5; // Size of the matrix
+    mat A = mat::Zero(n, n);
+    A.diagonal() << 4, 3, 5, 3, 4; // Main diagonal
+    A.diagonal(-1) << -1, -1, -1, -1; // Sub-diagonal
+    A.diagonal(1) << -1, -1, -1, -1; // Super-diagonal
+
+    // Define vector b
+    vec b(n);
+    b << 3, 3, 4, 3, 3;
+
+    // Tolerance for convergence
+    double tolerance = 0.001;
+    int bandwidth = 1; // Tridiagonal matrix has bandwidth of 1
+
+    // Relaxation factor (omega)
+    double omega = 1.5;
+
+    vec x;
+    unsigned int iterations;
+    std::tie(x, iterations) = sor_banded(A, b, bandwidth, omega, tolerance, consecutive);
+
+    // Output the solution
+    std::cout << "SOR Banded with Consecutive Stopping Criteria" << std::endl;
+    std::cout << "Solution vector x:\n" << x << std::endl;
+    std::cout << "Iterations: " << iterations << std::endl;
+    std::cout << "\n\n" << std::endl;
+
+    std::tie(x, iterations) = sor_banded(A, b, bandwidth, omega, tolerance, residual);
+    std::cout << "SOR Banded with Residual Stopping Criteria" << std::endl;
+    std::cout << "Solution vector x:\n" << x << std::endl;
+    std::cout << "Iterations: " << iterations << std::endl;
+    std::cout << "\n\n" << std::endl;
+}
+
 
 
 int main()
@@ -216,5 +321,10 @@ int main()
     test_jacobi();
     test_gauss_siedel();
     test_sor();
+    // Q4 banded matrices
+    test_jacobi_banded();
+    test_gauss_siedel_banded();
+    test_sor_banded();
+    
     return 0;
 }
