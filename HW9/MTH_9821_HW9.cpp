@@ -385,29 +385,12 @@ void test_solve()
 
     // Q6.4 Change of omega on SOR
     std::cout << "Q6.4 The SOR method results for different omega's" << std::endl;
-    omega = 1.02;
-    // Output the solution
-    std::tie(x, iterations) = sor_banded(A, b, bandwidth, omega, tolerance, residual);
-    std::cout << "SOR Banded with Residual Stopping Criteria and omega = 1.02" << std::endl;
-    std::cout << "Solution vector x:\n" << x << std::endl;
-    std::cout << "Iterations: " << iterations << std::endl;
-    std::cout << "\n\n" << std::endl;
-
-    omega = 0.02;
-    // Output the solution
-    std::tie(x, iterations) = sor_banded(A, b, bandwidth, omega, tolerance, residual);
-    std::cout << "SOR Banded with Residual Stopping Criteria and omega = 0.02" << std::endl;
-    std::cout << "Solution vector x:\n" << x << std::endl;
-    std::cout << "Iterations: " << iterations << std::endl;
-    std::cout << "\n\n" << std::endl;
-
-    omega = 1.98;
-    // Output the solution
-    std::tie(x, iterations) = sor_banded(A, b, bandwidth, omega, tolerance, residual);
-    std::cout << "SOR Banded with Residual Stopping Criteria and omega = 1.98" << std::endl;
-    std::cout << "Solution vector x:\n" << x << std::endl;
-    std::cout << "Iterations: " << iterations << std::endl;
-    std::cout << "\n\n" << std::endl;
+    for (float i = 1.02; i <= 1.98; i = i + 0.02)
+    {
+        omega = i;
+        std::tie(x, iterations) = sor_banded(A, b, bandwidth, omega, tolerance, residual);
+        std::cout << "omega = " << i << ", number to iterations = " << iterations << std::endl;
+    }
 
 }
 
@@ -431,7 +414,7 @@ int main()
     // convergence speed.
     // 2. Compare the convergence speed of the Jacobi method, the GS method and the SOR method:
     // SOR with a good choice of omega > GS > Jacobi > SOR with a bad choice of omega
-    // 3. For the SOR method, when omega is near to 0 or 2, the convergence speed is rather low compared to the omega close to 1
+    // 3. For the SOR method, when omega is near to 2, the convergence speed is rather low compared to the omega close to 1
     // 4. For the SOR method, when omega is near to 1, the solution and the convergence speed is similar to GS method (by definition).
     
     return 0;
