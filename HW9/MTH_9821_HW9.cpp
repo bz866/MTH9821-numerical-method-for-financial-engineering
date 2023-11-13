@@ -312,6 +312,105 @@ void test_sor_banded()
 }
 
 
+void test_solve()
+{
+    std::cout << "Q6 Solve test" << std::endl;
+    int n = 14; // Size of the matrix
+    mat A = mat::Zero(n, n);
+    A.diagonal() << 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2; // Main diagonal
+    A.diagonal(-1) << -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1; // Sub-diagonal
+    A.diagonal(1) << -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1; // Super-diagonal
+
+    // Define vector b
+    vec b(n);
+    b << 0, 1, 4, 9, 16, 25, 36, 49, 64, 81, 100, 121, 144, 169;
+    
+    // Tolerance for convergence
+    double tolerance = 0.000001;
+    int bandwidth = 1; // Tridiagonal matrix has bandwidth of 1
+
+    // Initial guess x_0
+    vec x_0(n);
+    x_0 << 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1;
+
+    vec x;
+    unsigned int iterations;
+
+    // Q6.1 Jacobi iteration
+    std::cout << "Q6.1 Solve the system using the Jacobi method" << std::endl;
+    // Output the solution
+    std::tie(x, iterations) = jacobiBanded(A, b, bandwidth, tolerance, residual);
+    std::cout << "Jacobi Banded with Residual Stopping Criteria" << std::endl;
+    std::cout << "Solution vector x:\n" << x << std::endl;
+    std::cout << "Iterations: " << iterations << std::endl;
+    std::cout << "\n\n" << std::endl;
+
+    std::tie(x, iterations) = jacobiBanded(A, b, bandwidth, tolerance, consecutive);
+    std::cout << "Jacobi Banded with Consecutive Stopping Criteria" << std::endl;
+    std::cout << "Solution vector x:\n" << x << std::endl;
+    std::cout << "Iterations: " << iterations << std::endl;
+    std::cout << "\n\n" << std::endl;
+
+    // Q6.2 GS iteration
+    std::cout << "Q6.2 Solve the system using the GS method" << std::endl;
+    // Output the solution
+    std::tie(x, iterations) = gauss_seidel_banded(A, b, bandwidth, tolerance, residual);
+    std::cout << "Gauss-Seidel Banded with Residual Stopping Criteria" << std::endl;
+    std::cout << "Solution vector x:\n" << x << std::endl;
+    std::cout << "Iterations: " << iterations << std::endl;
+    std::cout << "\n\n" << std::endl;
+
+    std::tie(x, iterations) = gauss_seidel_banded(A, b, bandwidth, tolerance, consecutive);
+    std::cout << "Gauss-Seidel Banded with Consecutive Stopping Criteria" << std::endl;
+    std::cout << "Solution vector x:\n" << x << std::endl;
+    std::cout << "Iterations: " << iterations << std::endl;
+    std::cout << "\n\n" << std::endl;
+
+    // Q6.3 SOR iteration
+    std::cout << "Q6.3 Solve the system using the SOR method" << std::endl;
+    // Relaxation factor (omega)
+    double omega = 1.15;
+    // Output the solution
+    std::tie(x, iterations) = sor_banded(A, b, bandwidth, omega, tolerance, residual);
+    std::cout << "SOR Banded with Residual Stopping Criteria and omega = 1.15" << std::endl;
+    std::cout << "Solution vector x:\n" << x << std::endl;
+    std::cout << "Iterations: " << iterations << std::endl;
+    std::cout << "\n\n" << std::endl;
+
+    std::tie(x, iterations) = sor_banded(A, b, bandwidth, omega, tolerance, consecutive);
+    std::cout << "SOR Banded with Consecutive Stopping Criteria and omega = 1.15" << std::endl;
+    std::cout << "Solution vector x:\n" << x << std::endl;
+    std::cout << "Iterations: " << iterations << std::endl;
+    std::cout << "\n\n" << std::endl;
+
+    // Q6.4 Change of omega on SOR
+    std::cout << "Q6.4 The SOR method results for different omega's" << std::endl;
+    omega = 1.02;
+    // Output the solution
+    std::tie(x, iterations) = sor_banded(A, b, bandwidth, omega, tolerance, residual);
+    std::cout << "SOR Banded with Residual Stopping Criteria and omega = 1.02" << std::endl;
+    std::cout << "Solution vector x:\n" << x << std::endl;
+    std::cout << "Iterations: " << iterations << std::endl;
+    std::cout << "\n\n" << std::endl;
+
+    omega = 0.02;
+    // Output the solution
+    std::tie(x, iterations) = sor_banded(A, b, bandwidth, omega, tolerance, residual);
+    std::cout << "SOR Banded with Residual Stopping Criteria and omega = 0.02" << std::endl;
+    std::cout << "Solution vector x:\n" << x << std::endl;
+    std::cout << "Iterations: " << iterations << std::endl;
+    std::cout << "\n\n" << std::endl;
+
+    omega = 1.98;
+    // Output the solution
+    std::tie(x, iterations) = sor_banded(A, b, bandwidth, omega, tolerance, residual);
+    std::cout << "SOR Banded with Residual Stopping Criteria and omega = 1.98" << std::endl;
+    std::cout << "Solution vector x:\n" << x << std::endl;
+    std::cout << "Iterations: " << iterations << std::endl;
+    std::cout << "\n\n" << std::endl;
+
+}
+
 
 int main()
 {
@@ -325,6 +424,15 @@ int main()
     test_jacobi_banded();
     test_gauss_siedel_banded();
     test_sor_banded();
+
+    // Q6 
+    test_solve();
+    // 1. The residual-based and consecutive approximation stopping conditions result in identical solution and quite similar
+    // convergence speed.
+    // 2. Compare the convergence speed of the Jacobi method, the GS method and the SOR method:
+    // SOR with a good choice of omega > GS > Jacobi > SOR with a bad choice of omega
+    // 3. For the SOR method, when omega is near to 0 or 2, the convergence speed is rather low compared to the omega close to 1
+    // 4. For the SOR method, when omega is near to 1, the solution and the convergence speed is similar to GS method (by definition).
     
     return 0;
 }
