@@ -35,7 +35,7 @@ public:
 	FDType fd_type;
 
 	FiniteDifferencePutOptionPricer(Option op_, double alpha_temp_, int M_, FDType fdtype_,
-		double value_=0.0)// value is to set exact value. Used for American option
+		double value_=3.3045363)// value is to set exact value. Used for American option
 		:op(op_), M(M_), alpha_temp(alpha_temp_),fd_type(fdtype_) {
 
 		if (op.type == European)
