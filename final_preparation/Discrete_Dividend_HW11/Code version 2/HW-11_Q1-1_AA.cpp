@@ -110,10 +110,10 @@ int main() {
     double dividendPercentage = 0.015;
     double dividendPeriod = 2.0 / 12.0;
     double riskFreeRate = 0.04;
-    double optionTerm = 7.0 / 12.0;
+    double optionTerm = 3.0 / 12.0;
 
-    int eurIniN = 7;
-    int amerIniN = 7;
+    int eurIniN = 6;
+    int amerIniN = 6;
 
     double tolerance = pow(10, -4);
 
